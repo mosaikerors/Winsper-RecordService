@@ -20,8 +20,8 @@ public class JournalController {
   @RequestMapping(value = "/journal/books", method = RequestMethod.GET)
   @ResponseBody
   public JSONObject getBooks(@RequestParam Long uId) {
-    try {
-      JSONObject ret = new JSONObject();
+
+      JSONObject ret = new JSONObject(true);
       JSONArray list = journalService.findBooksByuId(uId);
       if(list.isEmpty()){
         ret.put("rescode",3);
@@ -30,20 +30,13 @@ public class JournalController {
         ret.put("journalBooks",list);
       }
       return ret;
-
-    } catch (Exception e) {
-      JSONObject ret = new JSONObject();
-      ret.put("rescode", 1);
-      return ret;
-    }
   }
 
 
   @RequestMapping(value = "/journal/{journalBookId}", method = RequestMethod.GET)
   @ResponseBody
   public JSONObject getJournals(@PathVariable Long jounalBookId) {
-    try {
-      JSONObject ret = new JSONObject();
+      JSONObject ret = new JSONObject(true);
       JSONArray list = journalService.findJournalsByBookId(jounalBookId);
       if(list.isEmpty()){
         ret.put("rescode",3);
@@ -52,11 +45,5 @@ public class JournalController {
         ret.put("journals",list);
       }
       return ret;
-
-    } catch (Exception e) {
-      JSONObject ret = new JSONObject();
-      ret.put("rescode", 1);
-      return ret;
-    }
   }
 }

@@ -1,7 +1,6 @@
 package com.mosaiker.recordservice.service.serviceImple;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.mosaiker.recordservice.entity.Journal;
 import com.mosaiker.recordservice.entity.JournalBook;
 import com.mosaiker.recordservice.repository.JournalBookRepository;
@@ -21,11 +20,7 @@ public class JournalServiceImple implements JournalService {
     JSONArray books = new JSONArray();
     List<JournalBook> bookList = journalBookRepository.findAllByUId(uId);
     for(JournalBook book: bookList){
-      JSONObject onebook = new JSONObject();
-      onebook.put("journalBookId",book.getJournalBookId());
-      onebook.put("name",book.getName());
-      onebook.put("coverId",book.getCoverId());
-      books.add(onebook);
+      books.add(book.ToJSONObject());
     }
     return books;
   }
@@ -36,10 +31,7 @@ public class JournalServiceImple implements JournalService {
     JournalBook book = journalBookRepository.findByJournalBookId(journalBookId);
     List<Journal> list = book.getJournals();
     for(Journal journal: list){
-      JSONObject onejournal = new JSONObject();
-      onejournal.put("journalId", journal.getJournalId());
-      onejournal.put("journalUrl",journal.getJournalUrl());
-      journals.add(onejournal);
+      journals.add(journal.ToJSONObject());
     }
     return journals;
   }

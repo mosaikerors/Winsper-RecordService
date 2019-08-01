@@ -1,7 +1,10 @@
 package com.mosaiker.recordservice.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.mosaiker.recordservice.entity.Message;
 import com.mosaiker.recordservice.service.MessageService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +16,14 @@ public class MessageController {
     @RequestMapping(value = "/message/detailed", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject getSomeTypeMessage(@RequestParam int type, @RequestParam Long uId) {
-        JSONObject result = new JSONObject();
+        JSONObject result = new JSONObject(true);
         result.put("rescode", 0);
-        result.put("messages", messageService.findMessagesByReceiverUIdAndType(uId, type));
+        JSONArray list = new JSONArray();
+        List<Message> messages = messageService.findMessagesByReceiverUIdAndType(uId, type);
+        for(Message one:messages){
+            list.add(one.ToJSONObject());
+        }
+        result.put("messages", list);
         return result;
     }
 
