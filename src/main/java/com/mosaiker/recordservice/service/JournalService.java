@@ -4,6 +4,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface JournalService {
-  public JSONArray findBooksByuId(Long uId);
-  public JSONArray findJournalsByBookId(Long journalBookId);
+  JSONArray findBooksByuId(Long uId);
+  JSONArray findJournalsByBookId(Long journalBookId);
 }

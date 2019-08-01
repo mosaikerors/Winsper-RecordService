@@ -15,6 +15,7 @@ public class JournalServiceImple implements JournalService {
 
   @Autowired
   private JournalBookRepository journalBookRepository;
+
   @Override
   public JSONArray findBooksByuId(Long uId) {
     JSONArray books = new JSONArray();
@@ -29,6 +30,7 @@ public class JournalServiceImple implements JournalService {
     return books;
   }
 
+  @Override
   public JSONArray findJournalsByBookId(Long journalBookId){
     JSONArray journals = new JSONArray();
     JournalBook book = journalBookRepository.findByJournalBookId(journalBookId);

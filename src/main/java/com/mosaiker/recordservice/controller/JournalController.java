@@ -6,7 +6,6 @@ import com.mosaiker.recordservice.service.JournalService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,10 +19,9 @@ public class JournalController {
 
   @RequestMapping(value = "/journal/books", method = RequestMethod.GET)
   @ResponseBody
-  public JSONObject getBooks(@RequestParam JSONObject param) {
+  public JSONObject getBooks(@RequestParam Long uId) {
     try {
       JSONObject ret = new JSONObject();
-      Long uId = param.getLong("uId");
       JSONArray list = journalService.findBooksByuId(uId);
       if(list.isEmpty()){
         ret.put("rescode",3);
