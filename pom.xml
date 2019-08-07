@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.mosaiker</groupId>
-    <artifactId>recordservice</artifactId>
+    <artifactId>record-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>recordservice</name>
+    <name>record-service</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

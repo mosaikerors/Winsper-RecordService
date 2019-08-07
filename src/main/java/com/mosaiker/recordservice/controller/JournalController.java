@@ -5,12 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mosaiker.recordservice.service.JournalService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class JournalController {
@@ -19,7 +14,7 @@ public class JournalController {
 
   @RequestMapping(value = "/journal/books", method = RequestMethod.GET)
   @ResponseBody
-  public JSONObject getBooks(@RequestParam Long uId) {
+  public JSONObject getBooks(@RequestHeader Long uId) {
 
       JSONObject ret = new JSONObject(true);
       JSONArray list = journalService.findBooksByuId(uId);

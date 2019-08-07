@@ -15,7 +15,7 @@ public class MessageController {
 
     @RequestMapping(value = "/message/detailed", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject getSomeTypeMessage(@RequestParam int type, @RequestParam Long uId) {
+    public JSONObject getSomeTypeMessage(@RequestParam int type, @RequestHeader Long uId) {
         JSONObject result = new JSONObject(true);
         result.put("rescode", 0);
         JSONArray list = new JSONArray();
@@ -39,10 +39,9 @@ public class MessageController {
 
     @RequestMapping(value = "/message/hasRead/type", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject hasReadSomeType(@RequestBody JSONObject param) {
+    public JSONObject hasReadSomeType(@RequestBody JSONObject param, @RequestHeader Long uId) {
         JSONObject result = new JSONObject();
         int type = param.getIntValue("type");
-        Long uId = param.getLong("uId");
         messageService.readMessagesByReceiverUIdAndType(uId, type);
         result.put("rescode", 0);
         return result;
@@ -50,9 +49,8 @@ public class MessageController {
 
     @RequestMapping(value = "/message/hasRead/all", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject hasReadAll(@RequestBody JSONObject param) {
+    public JSONObject hasReadAll(@RequestBody JSONObject param, @RequestHeader Long uId) {
         JSONObject result = new JSONObject();
-        Long uId = param.getLong("uId");
         messageService.readMessagesByReceiverUId(uId);
         result.put("rescode", 0);
         return result;
@@ -60,7 +58,7 @@ public class MessageController {
 
     @RequestMapping(value = "/message/type", method = RequestMethod.DELETE)
     @ResponseBody
-    public JSONObject deleteSomeType(@RequestParam int type, @RequestParam Long uId) {
+    public JSONObject deleteSomeType(@RequestParam int type, @RequestHeader Long uId) {
         JSONObject result = new JSONObject();
         messageService.deleteMessagesByReceiverUIdAndType(uId, type);
         result.put("rescode", 0);
@@ -78,7 +76,7 @@ public class MessageController {
 
     @RequestMapping(value = "/message/all", method = RequestMethod.DELETE)
     @ResponseBody
-    public JSONObject deleteAll(@RequestParam Long uId) {
+    public JSONObject deleteAll(@RequestHeader Long uId) {
         JSONObject result = new JSONObject();
         messageService.deleteMessagesByReceiverUId(uId);
         result.put("rescode", 0);
