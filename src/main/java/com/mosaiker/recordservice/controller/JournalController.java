@@ -14,10 +14,10 @@ public class JournalController {
 
   @RequestMapping(value = "/journal/books", method = RequestMethod.GET)
   @ResponseBody
-  public JSONObject getBooks(@RequestHeader Long uId) {
+  public JSONObject getBooks(@RequestParam Long owner) {
 
       JSONObject ret = new JSONObject(true);
-      JSONArray list = journalService.findBooksByuId(uId);
+      JSONArray list = journalService.findBooksByuId(owner);
       if(list.isEmpty()){
         ret.put("rescode",3);
       }else{
@@ -28,9 +28,9 @@ public class JournalController {
   }
 
 
-  @RequestMapping(value = "/journal/{journalBookId}", method = RequestMethod.GET)
+  @RequestMapping(value = "/journal", method = RequestMethod.GET)
   @ResponseBody
-  public JSONObject getJournals(@PathVariable Long jounalBookId) {
+  public JSONObject getJournals(@RequestParam Long jounalBookId) {
       JSONObject ret = new JSONObject(true);
       JSONArray list = journalService.findJournalsByBookId(jounalBookId);
       if(list.isEmpty()){
@@ -41,4 +41,5 @@ public class JournalController {
       }
       return ret;
   }
+
 }

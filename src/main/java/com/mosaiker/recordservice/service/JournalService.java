@@ -1,5 +1,6 @@
 package com.mosaiker.recordservice.service;
 import com.alibaba.fastjson.JSONArray;
+import com.mosaiker.recordservice.entity.Journal;
 import org.springframework.stereotype.Service;
 
 @Service

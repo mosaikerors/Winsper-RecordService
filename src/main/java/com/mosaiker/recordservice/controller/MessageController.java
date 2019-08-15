@@ -56,7 +56,7 @@ public class MessageController {
         return result;
     }
 
-    @RequestMapping(value = "/message/type", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/message", method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject deleteSomeType(@RequestParam int type, @RequestHeader Long uId) {
         JSONObject result = new JSONObject();
