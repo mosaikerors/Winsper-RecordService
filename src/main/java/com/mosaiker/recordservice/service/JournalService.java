@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 public interface JournalService {
   JSONArray findBooksByuId(Long uId);
   JSONArray findJournalsByBookId(Long journalBookId);
+  int createJournal(Long journalBookId, String journalUrl, Long uId);
+  int deleteJournal(Long journalId, Long journalBookId, Long uId);
 }
