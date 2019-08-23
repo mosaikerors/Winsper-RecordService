@@ -39,4 +39,15 @@ public class MoodReportController {
     return ret;
   }
 
+  //此处应需要管理员权限
+  @RequestMapping(value = "/moodReport/generate", method = RequestMethod.POST)
+  @ResponseBody
+  public JSONObject generateMoodReport() {
+    //先搜索这一周所有发出的函，根据uId分类，然后调用api生成keyword,mood,image,poem.
+    //然后新增moodReport，这周没发过函的不给他生成心情报表
+    JSONObject ret = new JSONObject();
+    ret.put("rescode", 0);
+    return ret;
+  }
+
 }
