@@ -44,7 +44,7 @@ public class JournalController {
 
   @RequestMapping(value = "/journal", method = RequestMethod.POST)
   @ResponseBody
-  public JSONObject createJournal(@RequestBody JSONObject param, @RequestHeader Long uId) {
+  public JSONObject createJournal(@RequestBody JSONObject param, @RequestHeader("uId") Long uId) {
     JSONObject ret = new JSONObject(true);
     ret.put("rescode", journalService
         .createJournal(param.getLong("journalBookId"), param.getString("journalUrl"), uId));
@@ -53,7 +53,7 @@ public class JournalController {
 
   @RequestMapping(value = "/journal", method = RequestMethod.DELETE)
   @ResponseBody
-  public JSONObject deleteJournal(@RequestParam Long journalId, @RequestParam Long journalBookId, @RequestHeader Long uId) {
+  public JSONObject deleteJournal(@RequestParam Long journalId, @RequestParam Long journalBookId, @RequestHeader("uId") Long uId) {
     JSONObject ret = new JSONObject(true);
     ret.put("rescode", journalService
         .deleteJournal(journalId, journalBookId, uId));
