@@ -23,10 +23,6 @@ public class Diary {
   private String username;
   private String text;
 
-  public Diary() {
-
-  }
-
   public Diary(String title, String text, Long uId, String username) {
     this.text = text;
     this.title = title;
