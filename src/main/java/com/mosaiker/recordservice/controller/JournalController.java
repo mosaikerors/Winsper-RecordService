@@ -2,6 +2,7 @@ package com.mosaiker.recordservice.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.mosaiker.recordservice.entity.JournalBook;
 import com.mosaiker.recordservice.service.JournalService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,32 @@ public class JournalController {
   @RequestMapping(value = "/journal/books", method = RequestMethod.GET)
   @ResponseBody
   public JSONObject getBooks(@RequestParam Long owner) {
-
       JSONObject ret = new JSONObject(true);
       JSONArray list = journalService.findBooksByuId(owner);
-      ret.put("rescode",0);
-      ret.put("journalBooks",list);
+      ret.put("rescode", 0);
+      ret.put("journalBooks", list);
       return ret;
+  }
+
+
+  @RequestMapping(value = "/journal/books", method = RequestMethod.POST)
+  @ResponseBody
+  public JSONObject createBook(@RequestBody JSONObject param, @RequestHeader("uId") Long uId) {
+    JSONObject ret = new JSONObject(true);
+    JournalBook journalBook = new JournalBook(param.getString("name"), param.getInteger("coverId"),
+        uId);
+    journalService.createJournalBook(journalBook);
+    ret.put("rescode",0);
+    return ret;
+  }
+
+
+  @RequestMapping(value = "/journal/books", method = RequestMethod.DELETE)
+  @ResponseBody
+  public JSONObject deleteBook(@RequestParam Long journalBookId, @RequestHeader("uId") Long uId) {
+    JSONObject ret = new JSONObject(true);
+    ret.put("rescode", journalService.deleteJournalBook(journalBookId, uId));
+    return ret;
   }
 
 

@@ -49,7 +49,7 @@ public class MessageController {
 
     @RequestMapping(value = "/message/hasRead/all", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject hasReadAll(@RequestBody JSONObject param, @RequestHeader Long uId) {
+    public JSONObject hasReadAll(@RequestHeader Long uId) {
         JSONObject result = new JSONObject();
         messageService.readMessagesByReceiverUId(uId);
         result.put("rescode", 0);

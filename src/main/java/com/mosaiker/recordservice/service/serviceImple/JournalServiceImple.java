@@ -80,4 +80,19 @@ public class JournalServiceImple implements JournalService {
     return 0;
   }
 
+  @Override
+  public void createJournalBook(JournalBook journalBook) {
+    journalBookRepository.save(journalBook);
+  }
+
+  @Override
+  public int deleteJournalBook(Long journalBookId, Long uId) {
+    JournalBook journalBook = journalBookRepository.findByJournalBookId(journalBookId);
+    if (journalBook.getUId().equals(uId)) {
+      journalBookRepository.delete(journalBook);
+      return 0;
+    }
+    return 2;
+  }
+
 }
