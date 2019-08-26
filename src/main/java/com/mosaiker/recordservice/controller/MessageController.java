@@ -35,6 +35,9 @@ public class MessageController {
         JSONArray list = new JSONArray();
         for (int type = 0; type < 5; type++) {
             List<Message> messages = messageService.findMessagesByReceiverUIdAndType(uId, type);
+            if (messages == null) {
+                continue;
+            }
             JSONObject tmp = messages.get(messages.size() - 1).ToJSONObject();
             tmp.put("type", type);
             list.add(tmp);
