@@ -27,6 +27,22 @@ public class MessageController {
         return result;
     }
 
+    @RequestMapping(value = "/message/list", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject getAllTypeMessageList(@RequestHeader Long uId) {
+        JSONObject result = new JSONObject(true);
+        result.put("rescode", 0);
+        JSONArray list = new JSONArray();
+        for (int type = 0; type < 5; type++) {
+            List<Message> messages = messageService.findMessagesByReceiverUIdAndType(uId, type);
+            JSONObject tmp = messages.get(messages.size() - 1).ToJSONObject();
+            tmp.put("type", type);
+            list.add(tmp);
+        }
+        result.put("messages", list);
+        return result;
+    }
+
     @RequestMapping(value = "/message/hasRead/single", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject hasReadOne(@RequestBody JSONObject param) {

@@ -51,7 +51,7 @@ public class JournalController {
       JSONObject ret = new JSONObject(true);
       JSONArray list = journalService.findJournalsByBookId(journalBookId);
       ret.put("rescode",0);
-      ret.put("journalBooks",list);
+      ret.put("journals",list);
       return ret;
   }
 
