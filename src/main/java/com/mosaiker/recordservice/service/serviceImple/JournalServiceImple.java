@@ -66,7 +66,7 @@ public class JournalServiceImple implements JournalService {
       return 3;
     }
     if (!book.getUId().equals(uId)) {
-      return 4;
+      return 2;
     }
     Journal journal = journalRepository.findJournalByJournalId(journalId);
     if (journal == null) {
