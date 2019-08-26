@@ -20,10 +20,9 @@ public class Journal {
   private String journalUrl;
 
   public JSONObject ToJSONObject() {
-    JSONObject ret = new JSONObject() {{
+    return new JSONObject() {{
       put("journalId", journalId);
       put("journalUrl", journalUrl);
     }};
-    return ret;
   }
 }

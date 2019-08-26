@@ -46,7 +46,7 @@ public class JournalServiceImple implements JournalService {
     if (book == null) {
       return 3;
     }
-    if (book.getUId() != uId) {
+    if (!book.getUId().equals(uId)) {
       return 4;
     }
     Journal journal = new Journal();
@@ -65,10 +65,10 @@ public class JournalServiceImple implements JournalService {
     if (book == null) {
       return 3;
     }
-    if (book.getUId() != uId) {
+    if (!book.getUId().equals(uId)) {
       return 4;
     }
-    Journal journal = journalRepository.findById(journalId).get();
+    Journal journal = journalRepository.findJournalByJournalId(journalId);
     if (journal == null) {
       return 1;
     }

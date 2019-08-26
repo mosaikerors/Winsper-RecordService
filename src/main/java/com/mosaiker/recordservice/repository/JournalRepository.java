@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JournalRepository extends CrudRepository<Journal, Long> {
 
+  Journal findJournalByJournalId(Long journalId);
 }
