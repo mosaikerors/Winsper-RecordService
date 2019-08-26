@@ -72,11 +72,11 @@ public class JournalServiceImple implements JournalService {
     if (journal == null) {
       return 1;
     }
-    journalRepository.deleteById(journalId);
     List<Journal> list = book.getJournals();
     list.remove(journal);
     book.setJournals(list);
     journalBookRepository.save(book);
+    journalRepository.deleteById(journalId);
     return 0;
   }
 
