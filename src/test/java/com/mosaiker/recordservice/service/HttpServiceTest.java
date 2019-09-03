@@ -10,7 +10,12 @@ import org.junit.Test;
 public class HttpServiceTest {
 
   @Test
-  public void doGet() {
+  public void doGet() throws UnsupportedEncodingException {
+    String result = HttpService.doGet("http://127.0.0.1:11370/predict");
+    JSONObject parseObject = JSONObject.parseObject(result);
+    System.out.println(result);
+    String strUTF8 = URLDecoder.decode(parseObject.getString("poem"), "UTF-8");
+    System.out.println(strUTF8);
   }
 
   @Test
