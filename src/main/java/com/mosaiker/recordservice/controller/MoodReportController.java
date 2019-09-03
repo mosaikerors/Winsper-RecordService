@@ -57,7 +57,8 @@ public class MoodReportController {
   @ResponseBody
   public JSONObject generatePoem() throws UnsupportedEncodingException {
     JSONObject ret = new JSONObject();
-    String result = HttpService.doGet("http://127.0.0.1:11370/predict");
+    String result = HttpService.doGet("http://10.0.0.41:11370/predict");
+    System.out.println(result);
     JSONObject parseObject = JSONObject.parseObject(result);
     if (parseObject.getBoolean("success")) {
       ret.put("rescode", 0);
