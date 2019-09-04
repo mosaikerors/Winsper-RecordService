@@ -2,10 +2,17 @@ package com.mosaiker.recordservice.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.mosaiker.recordservice.entity.MoodReport;
+import com.mosaiker.recordservice.service.HeanInfoService;
 import com.mosaiker.recordservice.service.HttpService;
 import com.mosaiker.recordservice.service.MoodReportService;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class MoodReportController {
   @Autowired
   private MoodReportService moodReportService;
+
+  @Autowired
+  private HeanInfoService heanInfoService;
 
   @RequestMapping(value = "/moodReport/list", method = RequestMethod.GET)
   @ResponseBody
@@ -48,6 +58,65 @@ public class MoodReportController {
   public JSONObject generateMoodReport() {
     //先搜索这一周所有发出的函，根据uId分类，然后调用api生成keyword,mood,image,poem.
     //然后新增moodReport，这周没发过函的不给他生成心情报表
+    Date date = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setFirstDayOfWeek(Calendar.MONDAY);//设置周一为一周的第一天
+    cal.setTime(date);
+    int year = cal.get(Calendar.YEAR);
+    int week = cal.get(Calendar.WEEK_OF_YEAR);
+    JSONArray result = heanInfoService.findAllByTime("week").getJSONArray("heans");
+    Map<Long, JSONArray> peopleMap = new HashMap<>();
+    for (int i = 0; i < result.size(); i++) {
+      JSONObject hean = result.getJSONObject(i);
+      Long uId = hean.getLong("uId");
+      JSONArray jsonArray = peopleMap.get(uId);
+      if (jsonArray == null) {
+        jsonArray = new JSONArray();
+      }
+      jsonArray.add(hean);
+      peopleMap.put(uId, jsonArray);
+    }
+    //生成诗
+    String poemsResult = HttpService.doGet("http://10.0.0.41:11370/predict?number="+String.valueOf(peopleMap.size()));
+    JSONArray poems = JSONObject.parseObject(poemsResult).getJSONArray("poems");
+    int i = 0;
+    for (Long uId : peopleMap.keySet()) {
+      JSONArray heans = peopleMap.get(uId);
+      int heanNum = heans.size();
+      String poem = poems.getString(i);
+      i++;
+
+      String image = "";
+      StringBuilder texts = new StringBuilder();
+      for (int j = 0; j < heanNum; j++) {
+        String text = heans.getJSONObject(j).getString("text");
+        if (text != null && !text.equals("")) {
+          texts.append(text);
+          if (image.equals("")) {
+            //生成图片
+            JSONObject imageRequest = new JSONObject();
+            imageRequest.put("caption", text);
+            String imageResult = HttpService.doPost("http://10.0.0.41:23422/predict", imageRequest.toJSONString());
+            image = JSONObject.parseObject(imageResult).getString("url");
+          }
+        }
+      }
+      //生成关键词
+      JSONObject textRequest = new JSONObject();
+      textRequest.put("texts", texts);
+      String textResult = HttpService.doPost("http://10.0.0.41:11370/keyWord", textRequest.toJSONString());
+      String keyWord = JSONObject.parseObject(textResult).getString("keyWord");
+
+      //生成心情
+      JSONObject moodRequest = new JSONObject();
+      moodRequest.put("text", texts);
+      String moodResult = HttpService.doPost("http://10.0.0.41:23423/predict", moodRequest.toJSONString());
+      int mood = JSONObject.parseObject(moodResult).getIntValue("mood");
+
+      //生成心情报表
+      MoodReport moodReport = new MoodReport(uId, year, week, heanNum, keyWord, mood, image, poem);
+      moodReportService.addMoodReport(moodReport);
+    }
     JSONObject ret = new JSONObject();
     ret.put("rescode", 0);
     return ret;

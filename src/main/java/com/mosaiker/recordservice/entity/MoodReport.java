@@ -21,7 +21,6 @@ public class MoodReport {
   int year;
   int week;
   int heanNum;
-  int starNum;
   String keyWord;
   int mood;
   String image;
@@ -42,11 +41,21 @@ public class MoodReport {
       put("mood", mood);
       put("year", year);
       put("heanNum", heanNum);
-      put("starNum", starNum);
       put("keyWord", keyWord);
       put("image", image);
       put("poem", poem);
     }};
     return ret;
+  }
+
+  public MoodReport(Long uId, int year, int week, int heanNum, String keyWord, int mood, String image, String poem) {
+    this.uId = uId;
+    this.year = year;
+    this.week = week;
+    this.heanNum = heanNum;
+    this.keyWord = keyWord;
+    this.mood = mood;
+    this.image = image;
+    this.poem = poem;
   }
 }

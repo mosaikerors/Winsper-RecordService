@@ -37,4 +37,9 @@ public class MoodReportServiceImple implements MoodReportService {
     Optional<MoodReport> moodReport = moodReportRepository.findById(mrId);
     return moodReport.map(MoodReport::ToJSONObject).orElse(null);
   }
+
+  @Override
+  public void addMoodReport(MoodReport moodReport) {
+    moodReportRepository.save(moodReport);
+  }
 }
