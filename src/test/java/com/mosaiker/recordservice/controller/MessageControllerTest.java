@@ -8,12 +8,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.mosaiker.recordservice.entity.Message;
 import com.mosaiker.recordservice.service.MessageService;
 import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * MessageController Tester.
@@ -29,10 +34,7 @@ public class MessageControllerTest {
   @InjectMocks
   private MessageController messageController;
   private Message message1 = new Message(1, 1L, 2L, "test2", "1", "follow");
-//  private Message message2 = new  Message(2, 1L, 2L, "test2", "2", "like");
-//  private Message message3 = new  Message(3, 1L, 2L, "test2", "3", "star");
-//  private Message message4 = new  Message(4, 1L, 2L, "test2", "4", "comment");
-//  private Message message5 = new  Message(5, 1L, 2L, "test2", "5", "contribute");
+
 
 
   @Before
@@ -63,6 +65,30 @@ public class MessageControllerTest {
     assertEquals(expect, messageController.getSomeTypeMessage(1, 1L));
   }
 
+  /**
+   * Method: getAllTypeMessageList(@RequestParam Long uId)
+   */
+  @Test
+  public void testGetAllTypeMessageList() {
+    when(messageService.findMessagesByReceiverUIdAndType(1L, 0)).thenReturn(null);
+    when(messageService.findMessagesByReceiverUIdAndType(1L,4)).thenReturn(new ArrayList<>());
+    when(messageService.findMessagesByReceiverUIdAndType(1L, 2)).thenReturn(null);
+    when(messageService.findMessagesByReceiverUIdAndType(1L, 3)).thenReturn(null);
+    when(messageService.findMessagesByReceiverUIdAndType(1L, 1))
+        .thenReturn(new ArrayList<Message>() {{
+          add(message1);
+        }});
+    JSONArray expectArray = new JSONArray() {{
+      add(message1.ToJSONObject());
+    }};
+    JSONObject expect = new JSONObject(true) {{
+      put("rescode", 0);
+      put("messages", expectArray);
+    }};
+    System.out.println(messageController.getAllTypeMessageList(1L));
+    assertEquals(expect, messageController.getAllTypeMessageList(1L));
+
+  }
   /**
    * Method: hasReadOne(@RequestBody JSONObject param)
    */
@@ -95,12 +121,9 @@ public class MessageControllerTest {
    */
   @Test
   public void testHasReadAll() throws Exception {
-    JSONObject param = new JSONObject() {{
-      put("uId", 1L);
-    }};
     assertEquals(new JSONObject() {{
       put("rescode", 0);
-    }}, messageController.hasReadAll(param,1L));
+    }}, messageController.hasReadAll(1L));
   }
 
   /**
