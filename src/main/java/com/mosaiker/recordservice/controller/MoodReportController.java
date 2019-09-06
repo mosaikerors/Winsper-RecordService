@@ -77,7 +77,7 @@ public class MoodReportController {
       peopleMap.put(uId, jsonArray);
     }
     //生成诗
-    String poemsResult = HttpService.doGet("http://10.0.0.41:11370/predict?number="+String.valueOf(peopleMap.size()));
+    String poemsResult = HttpService.doGet("http://47.103.0.246:11370/predict?number="+String.valueOf(peopleMap.size()));
     JSONArray poems = JSONObject.parseObject(poemsResult).getJSONArray("poems");
     int i = 0;
     for (Long uId : peopleMap.keySet()) {
@@ -104,7 +104,7 @@ public class MoodReportController {
       //生成关键词
       JSONObject textRequest = new JSONObject();
       textRequest.put("texts", texts);
-      String textResult = HttpService.doPost("http://10.0.0.41:11370/keyWord", textRequest.toJSONString());
+      String textResult = HttpService.doPost("http://47.103.0.246:11370/keyWord", textRequest.toJSONString());
       String keyWord = JSONObject.parseObject(textResult).getString("keyWord");
 
       //生成心情
