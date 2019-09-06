@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({DiaryController.class, JournalControllerTest.class,MessageControllerTest.class,MoodReportControllerTest.class})
+@Suite.SuiteClasses({DiaryControllerTest.class, JournalControllerTest.class,MessageControllerTest.class,MoodReportControllerTest.class})
 public class ControllerTests {
 
 }
