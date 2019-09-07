@@ -4,7 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({JournalServiceImpleTest.class, MessageServiceImpleTest.class})
+@Suite.SuiteClasses({JournalServiceImpleTest.class,MoodReportServiceImpleTest.class, MessageServiceImpleTest.class})
 public class ServiceTests {
 
 }
