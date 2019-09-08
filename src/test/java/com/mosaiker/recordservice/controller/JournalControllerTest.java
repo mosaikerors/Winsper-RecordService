@@ -1,6 +1,9 @@
 package com.mosaiker.recordservice.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.alibaba.fastjson.JSONArray;
@@ -15,6 +18,12 @@ import org.junit.After;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * JournalController Tester.
@@ -57,10 +66,6 @@ public class JournalControllerTest {
       put("journalBooks", expectList);
     }}, journalController.getBooks(1L));
 
-    when(journalService.findBooksByuId(3L)).thenReturn(new JSONArray());
-    assertEquals(new JSONObject() {{
-      put("rescode", 3);
-    }}, journalController.getBooks(3L));
   }
 
   /**
@@ -76,12 +81,44 @@ public class JournalControllerTest {
       put("rescode", 0);
       put("journals", expectList);
     }}, journalController.getJournals(1L));
-
-    when(journalService.findJournalsByBookId(3L)).thenReturn(new JSONArray());
-    assertEquals(new JSONObject() {{
-      put("rescode", 3);
-    }}, journalController.getJournals(3L));
   }
 
+  /**
+   * Method: deleteBook(@RequestParam Long journalBookId, @RequestHeader("uId") Long uId)
+   */
+  @Test
+  public void testDeleteBook() {
+    when(journalService.deleteJournalBook(1L,1L)).thenReturn(0);
+    assertEquals(new JSONObject(){{put("rescode",0);}},journalController.deleteBook(1L,1L));
+  }
 
+  /**
+   * Method: createBook(@RequestBody JSONObject param, @RequestHeader("uId") Long uId)
+   */
+  @Test
+  public void createBook() {
+    JSONObject param = new JSONObject(true){{put("name","jbook");put("coverId",1);}};
+    assertEquals(new JSONObject(){{put("rescode",0);}},journalController.createBook(param,1L));
+    verify(journalService).createJournalBook(anyObject());
+
+  }
+  /**
+   * Method: createJournal(@RequestBody JSONObject param, @RequestHeader("uId") Long uId)
+   */
+  @Test
+  public void createJournal() {
+    JSONObject param = new JSONObject(true){{put("journalBookId",1L);put("journalUrl","url");}};
+    when(journalService.createJournal(1L,"url",1L)).thenReturn(0);
+    assertEquals(new JSONObject(){{put("rescode",0);}},journalController.createJournal(param,1L));
+  }
+
+  /**
+   * Method: deleteJournal(@RequestParam Long journalId, @RequestParam Long journalBookId, @RequestHeader("uId") Long uId)
+   */
+  @Test
+  public void deleteJournal() {
+
+    when(journalService.deleteJournal(1L,1L,1L)).thenReturn(0);
+    assertEquals(new JSONObject(){{put("rescode",0);}},journalController.deleteJournal(1L,1L,1L));
+}
 }

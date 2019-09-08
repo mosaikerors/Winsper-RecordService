@@ -26,6 +26,8 @@ public class MoodReportController {
   private MoodReportService moodReportService;
 
   @Autowired
+  private HttpService httpService;
+  @Autowired
   private HeanInfoService heanInfoService;
 
   @RequestMapping(value = "/moodReport/list", method = RequestMethod.GET)
@@ -77,7 +79,7 @@ public class MoodReportController {
       peopleMap.put(uId, jsonArray);
     }
     //生成诗
-    String poemsResult = HttpService.doGet("http://47.103.0.246:11370/predict?number="+String.valueOf(peopleMap.size()));
+    String poemsResult = httpService.doGet("http://47.103.0.246:11370/predict?number="+String.valueOf(peopleMap.size()));
     JSONArray poems = JSONObject.parseObject(poemsResult).getJSONArray("poems");
     int i = 0;
     for (Long uId : peopleMap.keySet()) {
@@ -96,7 +98,7 @@ public class MoodReportController {
             //生成图片
             JSONObject imageRequest = new JSONObject();
             imageRequest.put("caption", text);
-            String imageResult = HttpService.doPost("http://10.0.0.41:23422/predict", imageRequest.toJSONString());
+            String imageResult = httpService.doPost("http://10.0.0.41:23422/predict", imageRequest.toJSONString());
             image = JSONObject.parseObject(imageResult).getString("url");
           }
         }
@@ -104,13 +106,13 @@ public class MoodReportController {
       //生成关键词
       JSONObject textRequest = new JSONObject();
       textRequest.put("texts", texts);
-      String textResult = HttpService.doPost("http://47.103.0.246:11370/keyWord", textRequest.toJSONString());
+      String textResult = httpService.doPost("http://47.103.0.246:11370/keyWord", textRequest.toJSONString());
       String keyWord = JSONObject.parseObject(textResult).getString("keyWord");
 
       //生成心情
       JSONObject moodRequest = new JSONObject();
       moodRequest.put("text", texts);
-      String moodResult = HttpService.doPost("http://10.0.0.41:23423/predict", moodRequest.toJSONString());
+      String moodResult = httpService.doPost("http://10.0.0.41:23423/predict", moodRequest.toJSONString());
       int mood = JSONObject.parseObject(moodResult).getIntValue("mood");
 
       //生成心情报表
@@ -126,7 +128,7 @@ public class MoodReportController {
   @ResponseBody
   public JSONObject generatePoem() throws UnsupportedEncodingException {
     JSONObject ret = new JSONObject();
-    String result = HttpService.doGet("http://10.0.0.41:11370/predict");
+    String result = httpService.doGet("http://10.0.0.41:11370/predict");
     System.out.println(result);
     JSONObject parseObject = JSONObject.parseObject(result);
     if (parseObject.getBoolean("success")) {

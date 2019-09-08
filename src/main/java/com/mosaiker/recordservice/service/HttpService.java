@@ -8,9 +8,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.springframework.stereotype.Service;
 
+@Service
 public class HttpService {
-  public static String doGet(String httpurl) {
+  public  String doGet(String httpurl) {
     HttpURLConnection connection = null;
     InputStream is = null;
     BufferedReader br = null;
@@ -69,7 +71,7 @@ public class HttpService {
     return result;
   }
 
-  public static String doPost(String httpUrl, String param) {
+  public  String doPost(String httpUrl, String param) {
 
     HttpURLConnection connection = null;
     InputStream is = null;
