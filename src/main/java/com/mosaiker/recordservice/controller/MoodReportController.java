@@ -8,6 +8,7 @@ import com.mosaiker.recordservice.service.HttpService;
 import com.mosaiker.recordservice.service.MoodReportService;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -68,6 +69,7 @@ public class MoodReportController {
     int week = cal.get(Calendar.WEEK_OF_YEAR);
     JSONArray result = heanInfoService.findAllByTime("week").getJSONArray("heans");
     Map<Long, JSONArray> peopleMap = new HashMap<>();
+    List<MoodReport> reportList = new ArrayList<>();
     for (int i = 0; i < result.size(); i++) {
       JSONObject hean = result.getJSONObject(i);
       Long uId = hean.getLong("uId");
@@ -117,8 +119,14 @@ public class MoodReportController {
 
       //生成心情报表
       MoodReport moodReport = new MoodReport(uId, year, week, heanNum, keyWord, mood, image, poem);
+      reportList.add(moodReport);
+    }
+
+    //存到数据库
+    for (MoodReport moodReport : reportList) {
       moodReportService.addMoodReport(moodReport);
     }
+
     JSONObject ret = new JSONObject();
     ret.put("rescode", 0);
     return ret;
