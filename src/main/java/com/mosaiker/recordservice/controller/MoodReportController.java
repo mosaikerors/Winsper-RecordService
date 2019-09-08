@@ -15,11 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MoodReportController {
@@ -126,6 +122,69 @@ public class MoodReportController {
     for (MoodReport moodReport : reportList) {
       moodReportService.addMoodReport(moodReport);
     }
+
+    JSONObject ret = new JSONObject();
+    ret.put("rescode", 0);
+    return ret;
+  }
+
+  @RequestMapping(value = "/moodReport/generateOne", method = RequestMethod.POST)
+  @ResponseBody
+  public JSONObject generateOneMoodReport(@RequestBody JSONObject param) {
+    //先搜索这一周所有发出的函，根据uId分类，然后调用api生成keyword,mood,image,poem.
+    //然后新增moodReport，这周没发过函的不给他生成心情报表
+    Date date = new Date();
+    Calendar cal = Calendar.getInstance();
+    cal.setFirstDayOfWeek(Calendar.MONDAY);//设置周一为一周的第一天
+    cal.setTime(date);
+    int year = cal.get(Calendar.YEAR);
+    int week = cal.get(Calendar.WEEK_OF_YEAR);
+    JSONArray result = heanInfoService.findAllByTime("week").getJSONArray("heans");
+    JSONArray heans = new JSONArray();
+    Long targetUId = param.getLong("targetUId");
+    for (int i = 0; i < result.size(); i++) {
+      JSONObject hean = result.getJSONObject(i);
+      Long uId = hean.getLong("uId");
+      if (uId.equals(targetUId)) {
+        heans.add(hean);
+      }
+    }
+    //生成诗
+    String poemsResult = httpService.doGet("http://47.103.0.246:11370/predict");
+    JSONArray poems = JSONObject.parseObject(poemsResult).getJSONArray("poems");
+    int heanNum = heans.size();
+    String poem = poems.getString(0);
+    String image = "";
+    StringBuilder texts = new StringBuilder();
+    for (int j = 0; j < heanNum; j++) {
+      String text = heans.getJSONObject(j).getString("text");
+      if (text != null && !text.equals("")) {
+        texts.append(text);
+        if (image.equals("")) {
+          //生成图片
+          JSONObject imageRequest = new JSONObject();
+          imageRequest.put("caption", text);
+          String imageResult = httpService.doPost("http://10.0.0.41:23422/predict", imageRequest.toJSONString());
+          image = JSONObject.parseObject(imageResult).getString("url");
+        }
+      }
+    }
+
+    //生成关键词
+    JSONObject textRequest = new JSONObject();
+    textRequest.put("texts", texts);
+    String textResult = httpService.doPost("http://47.103.0.246:11370/keyWord", textRequest.toJSONString());
+    String keyWord = JSONObject.parseObject(textResult).getString("keyWord");
+
+    //生成心情
+    JSONObject moodRequest = new JSONObject();
+    moodRequest.put("text", texts);
+    String moodResult = httpService.doPost("http://10.0.0.41:23423/predict", moodRequest.toJSONString());
+    int mood = JSONObject.parseObject(moodResult).getIntValue("mood");
+
+    //生成心情报表
+    MoodReport moodReport = new MoodReport(uId, year, week, heanNum, keyWord, mood, image, poem);
+    moodReportService.addMoodReport(moodReport);
 
     JSONObject ret = new JSONObject();
     ret.put("rescode", 0);
