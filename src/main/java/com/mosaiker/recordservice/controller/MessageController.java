@@ -33,7 +33,7 @@ public class MessageController {
         JSONObject result = new JSONObject(true);
         result.put("rescode", 0);
         JSONArray list = new JSONArray();
-        for (int type = 0; type < 5; type++) {
+        for (int type = 1; type < 7; type++) {
             List<Message> messages = messageService.findMessagesByReceiverUIdAndType(uId, type);
             if (messages == null || messages.size() == 0) {
                 continue;
