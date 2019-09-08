@@ -41,7 +41,7 @@ public class MoodReportController {
 
   @RequestMapping(value = "/moodReport/detailed", method = RequestMethod.GET)
   @ResponseBody
-  public JSONObject getMoodReport(@RequestParam Long moodReportId) {
+  public JSONObject getMoodReport(@RequestParam String moodReportId) {
 
     JSONObject ret = new JSONObject();
     JSONObject moodReport = moodReportService.getMoodReportByMoodReportId(moodReportId);

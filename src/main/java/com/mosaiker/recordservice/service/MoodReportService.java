@@ -7,7 +7,7 @@ import com.mosaiker.recordservice.entity.MoodReport;
 public interface MoodReportService {
   JSONObject getMoodReportListByUId(Long uId);
 
-  JSONObject getMoodReportByMoodReportId(Long mrId);
+  JSONObject getMoodReportByMoodReportId(String mrId);
 
   void addMoodReport(MoodReport moodReport);
 }

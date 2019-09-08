@@ -33,7 +33,7 @@ public class MoodReportServiceImple implements MoodReportService {
   }
 
   @Override
-  public JSONObject getMoodReportByMoodReportId(Long mrId) {
+  public JSONObject getMoodReportByMoodReportId(String mrId) {
     Optional<MoodReport> moodReport = moodReportRepository.findById(mrId);
     return moodReport.map(MoodReport::ToJSONObject).orElse(null);
   }

@@ -66,8 +66,8 @@ public class MoodReportControllerTest {
    */
   @Test
   public void testGetMoodReport() throws Exception {
-    when(moodReportService.getMoodReportByMoodReportId(1L)).thenReturn(report1.ToJSONObject());
-    when(moodReportService.getMoodReportByMoodReportId(2L)).thenReturn(null);
+    when(moodReportService.getMoodReportByMoodReportId("1")).thenReturn(report1.ToJSONObject());
+    when(moodReportService.getMoodReportByMoodReportId("2")).thenReturn(null);
     JSONObject exp_ok = new JSONObject(true) {{
       put("rescode", 0);
       put("moodReport", report1.ToJSONObject());
@@ -76,8 +76,8 @@ public class MoodReportControllerTest {
       put("rescode", 1);
     }};
 
-    assertEquals(exp_ok, moodReportController.getMoodReport(1L));
-    assertEquals(exp_null, moodReportController.getMoodReport(2L));
+    assertEquals(exp_ok, moodReportController.getMoodReport("1"));
+    assertEquals(exp_null, moodReportController.getMoodReport("2"));
   }
 
   /**

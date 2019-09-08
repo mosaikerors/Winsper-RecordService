@@ -64,12 +64,12 @@ public class MoodReportServiceImpleTest {
   }
 
   /**
-   * Method: getMoodReportByMoodReportId(Long mrId)
+   * Method: getMoodReportByMoodReportId(String mrId)
    */
   @Test
   public void testGetMoodReportByMoodReportId() throws Exception {
-    when(moodReportRepository.findById(1L)).thenReturn(Optional.of(report1));
-    assertEquals(report1.ToJSONObject(), moodReportServiceImple.getMoodReportByMoodReportId(1L));
+    when(moodReportRepository.findById("1")).thenReturn(Optional.of(report1));
+    assertEquals(report1.ToJSONObject(), moodReportServiceImple.getMoodReportByMoodReportId("1"));
   }
 
   /**

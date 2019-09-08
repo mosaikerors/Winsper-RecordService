@@ -1,22 +1,22 @@
 package com.mosaiker.recordservice.entity;
 
 import com.alibaba.fastjson.JSONObject;
-import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import javax.persistence.GeneratedValue;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Entity
+@Document
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class MoodReport {
   @Id
   @GeneratedValue
-  Long moodReportId;
+  String moodReportId;
   Long uId;
   int year;
   int week;
