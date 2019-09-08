@@ -100,7 +100,7 @@ public class MoodReportController {
             //生成图片
             JSONObject imageRequest = new JSONObject();
             imageRequest.put("caption", text);
-            String imageResult = httpService.doPost("http://47.102.205.224:23422/predict", imageRequest.toJSONString());
+            String imageResult = httpService.doPost("http://10.0.0.41:23422/predict", imageRequest.toJSONString());
             image = JSONObject.parseObject(imageResult).getString("url");
           }
         }
