@@ -183,7 +183,7 @@ public class MoodReportController {
     int mood = JSONObject.parseObject(moodResult).getIntValue("mood");
 
     //生成心情报表
-    MoodReport moodReport = new MoodReport(uId, year, week, heanNum, keyWord, mood, image, poem);
+    MoodReport moodReport = new MoodReport(targetUId, year, week, heanNum, keyWord, mood, image, poem);
     moodReportService.addMoodReport(moodReport);
 
     JSONObject ret = new JSONObject();
